@@ -29,7 +29,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<IdentityRole>>("NZWalks")
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("NZWalks")
     .AddEntityFrameworkStores<NZWalksAuthDbContext>()
     .AddDefaultTokenProviders();
 
@@ -41,7 +41,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
-})
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
