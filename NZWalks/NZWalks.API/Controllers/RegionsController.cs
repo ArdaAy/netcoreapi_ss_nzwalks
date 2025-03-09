@@ -37,10 +37,29 @@ namespace NZWalks.API.Controllers
         //[Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAll()
         {
-            logger.LogInformation("GetAllRegions Action Method was invoked");
+            //logger.LogInformation("GetAllRegions Action Method was invoked");
+            try
+            {
+                throw new Exception("This is a custom exception");
 
-            // Get Data From Database - Domain Models
-            var regionsDomain = await regionRepository.GetAllAsync();
+                // Get Data From Database - Domain Models
+                var regionsDomain = await regionRepository.GetAllAsync();
+
+                // Map Domain Models to DTOs
+                var regionsDto = mapper.Map<List<RegionDto>>(regionsDomain);
+
+                //Return DTOs
+                logger.LogInformation($"Finished GetAllRegions request with data {JsonSerializer.Serialize(regionsDomain)}");
+                return Ok(regionsDto);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                throw;
+            }
+            
+
+            
 
             // Map Domain Models to DTOs
             /*
@@ -57,12 +76,7 @@ namespace NZWalks.API.Controllers
             }
             */
 
-            // Map Domain Models to DTOs
-            var regionsDto = mapper.Map<List<RegionDto>>(regionsDomain);
-
-            //Return DTOs
-            logger.LogInformation($"Finished GetAllRegions request with data {JsonSerializer.Serialize(regionsDomain)}");
-            return Ok(regionsDto);
+            
         }
 
         // GET SINGLE REGION (Get region By ID)
